@@ -31,7 +31,7 @@ trap 'pactl move-sink-input $spotify $pasink' EXIT
 # Move Spotify to its own sink so recorded output will not get corrupted
 pactl move-sink-input $spotify spotify
 
-$script_dir/notify.sh | while read line
+$script_dir/notify2.sh | while read line
 do
   if [[ $line == "__SWITCH__" ]]; then
     killall oggenc 2>/dev/null
@@ -42,11 +42,13 @@ do
           -t "TITLE=$title" -t "tracknumber=$tracknumber"
       # Sanitize filenames
       saveto="$musicdir/${artist//\/ /}/${album//\/ /}"
-      echo "Saved song $title by $artist to $saveto/${title//\/ /}.ogg"
+      #include track number in filename
+      echo "Saved song $title by $artist to $saveto/$tracknumber - ${title//\/ /}.ogg"
       if [[ ! -a $saveto ]]; then
         mkdir -p "$saveto"
       fi
-      mv tmp.ogg "$saveto/${title//\/ /}.ogg"
+      #include track number in filename
+      mv tmp.ogg "$saveto/$tracknumber - ${title//\/ /}.ogg"
       if [[ -s cover.jpg ]] && [[ ! -a "$saveto/cover.jpg" ]]; then
         mv cover.jpg "$saveto/cover.jpg"
       fi
@@ -54,10 +56,11 @@ do
       album=""
       title=""
       tracknumber=""
-      rm -f cover.jpg
+#Removed trackify, as I don't care for the artwork, so no need or this      
+#      rm -f cover.jpg  
     fi
     echo "RECORDING"
-    parec -d spotify.monitor | oggenc -b 192 -o tmp.ogg --raw - 2>/dev/null\
+    parec -d spotify.monitor | oggenc -b 256 -o tmp.ogg --raw - 2>/dev/null\
       &disown
     trap 'pactl move-sink-input $spotify $pasink && killall oggenc && killall parec' EXIT
 
@@ -73,9 +76,9 @@ do
     elif [[ $variant == "album" ]]; then
       album="$string"
       echo "Album = $string"
-    elif [[ $variant == "url" ]]; then
-      # Get the track number and download the coverart using an outside script
-      tracknumber=$(`$script_dir/trackify.sh` "$string")
+    elif [[ $variant == "trackNumber" ]]; then
+      # Get the track number from the notification
+      tracknumber="$string"
       echo "Track number = $tracknumber"
     fi
   fi
