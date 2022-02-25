@@ -15,7 +15,7 @@ This application records the audio that is played from Spotify, much like one wo
 
 ## Features
 
-The recorded audio is automatically splitted and tagged with the artist, song name, track number, and album cover image information, and encoded in 192kbps ogg vorbis.
+The recorded audio is automatically splitted and tagged with the artist, song name, track number, and encoded in 192kbps ogg vorbis.
 
 Because audio interruptions can occur which get recorded along with the song, the ripper gains control over the sound output so only the sound coming from Spotify gets recorded, meaning Spotify will not play through the speakers, however no other sound playing on the machine will be recorded during the rip.
 
