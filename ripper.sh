@@ -31,7 +31,7 @@ trap 'pactl move-sink-input $spotify $pasink' EXIT
 # Move Spotify to its own sink so recorded output will not get corrupted
 pactl move-sink-input $spotify spotify
 
-$script_dir/notify2.sh | while read line
+$script_dir/notify.sh | while read line
 do
   if [[ $line == "__SWITCH__" ]]; then
     killall oggenc 2>/dev/null
