@@ -21,7 +21,9 @@ fi
 
 # Determine if spotify.monitor is already set up
 if [[ -z $(pactl list short | grep spotify.monitor) ]]; then
-  pactl load-module module-null-sink 'sink_name=spotify'
+  #record spotify AND listen to it:
+  pactl load-module module-combine-sink 'sink_name=spotify' slaves=Butyok
+  #slaves=sinkname, where it really sounds. Adapt it to your system.
 fi
 
 # Move Spotify sound output back to default at exit
