@@ -30,6 +30,8 @@ do
       if [[ -n $col2 ]] ; then
         simplevariant2=$(echo "$variant" | cut -d: -f2)
         if [[ $simplevariant2 == "trackNumber" ]]; then
+            col2=$(printf %02d $col2) 
+            #added trailing zero to track number below 10; results like: Tracknumber=03 Tracknumber=07 Tracknumber=12 etc..
             echo "$simplevariant2=$col2"
         fi
       fi 
